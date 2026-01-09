@@ -13,97 +13,159 @@ body {
   min-height: 100vh;
 }
 
-/* top nav */
+/* Topbar */
 .topbar {
   position: fixed;
   top: 0;
   left: 0;
   right: 0;
-  padding: 14px var(--pad);
+  padding: 18px var(--pad);
   z-index: 10;
+  display: flex;
+  justify-content: center;
+  transition: transform 260ms ease, opacity 260ms ease;
 }
 
+.topbar.hide {
+  transform: translateY(-10px);
+  opacity: 0;
+}
+
+/* centered nav */
 .nav {
-  display: flex;
-  gap: 10px;
+  display: inline-flex;
+  gap: 14px;
   align-items: center;
 }
 
-/* white ellipses */
+/* BIG pills: white with inner black border */
 .pill {
-  border: 1.2px solid #000;
+  border: 0;
   background: #fff;
   color: #000;
   cursor: pointer;
-  padding: 10px 14px;
+  padding: 16px 22px;
   border-radius: 999px;
-  font-size: 13px;
+  font-size: 15px;
   letter-spacing: 0.02em;
-  transition: transform 160ms ease, opacity 160ms ease;
+  text-transform: lowercase;
+
+  /* inner border */
+  box-shadow: inset 0 0 0 2px #000;
+  transition: transform 170ms ease, opacity 170ms ease;
 }
 
 .pill:hover { transform: translateY(-1px); }
-.pill:active { transform: translateY(0px); opacity: 0.85; }
+.pill:active { transform: translateY(0); opacity: 0.85; }
 
+/* page stage */
 .stage {
-  min-height: 100vh;
+  min-height: 200vh; /* gives you scroll so the hide effect is visible */
   display: grid;
   place-items: center;
-  padding: 80px var(--pad) 24px; /* leaves space for topbar */
+  padding: 110px var(--pad) 40px;
 }
 
 .mark {
   font-size: 13px;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.10em;
   text-transform: lowercase;
-  opacity: 0.55;
+  opacity: 0.45;
 }
 
-/* toast */
-.toast {
+.spacer {
+  height: 120vh; /* extra empty space so scroll feels intentional */
+}
+
+/* Window modal */
+.modal {
   position: fixed;
-  left: 50%;
-  top: 78px;
-  transform: translateX(-50%) translateY(-10px);
+  inset: 0;
+  display: grid;
+  place-items: center;
+  background: rgba(0,0,0,0.55);
   opacity: 0;
   pointer-events: none;
-  transition: opacity 180ms ease, transform 180ms ease;
+  transition: opacity 200ms ease;
   z-index: 20;
 }
 
-.toast.show {
+.modal.is-open {
   opacity: 1;
   pointer-events: auto;
-  transform: translateX(-50%) translateY(0px);
 }
 
-.toast-inner {
-  background: rgba(255,255,255,0.12);
-  border: 1px solid rgba(255,255,255,0.16);
-  backdrop-filter: blur(10px);
-  padding: 12px 14px;
-  border-radius: 14px;
-  text-align: center;
-  min-width: 180px;
+.window {
+  width: min(520px, calc(100vw - 28px));
+  border-radius: 18px;
+  background: #fff;
+  color: #000;
+  box-shadow: 0 22px 70px rgba(0,0,0,0.35);
+  overflow: hidden;
+  transform: translateY(10px);
+  transition: transform 220ms ease;
 }
 
-.toast-title {
+.modal.is-open .window {
+  transform: translateY(0);
+}
+
+.titlebar {
+  height: 46px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 12px 0 14px;
+  box-shadow: inset 0 -1px 0 rgba(0,0,0,0.12);
+}
+
+.title {
   font-size: 13px;
-  letter-spacing: 0.06em;
+  letter-spacing: 0.04em;
+  opacity: 0.75;
   text-transform: uppercase;
 }
 
-.toast-sub {
-  margin-top: 6px;
-  font-size: 12px;
-  opacity: 0.7;
-  letter-spacing: 0.04em;
+.close {
+  width: 36px;
+  height: 30px;
+  border: 0;
+  background: transparent;
+  color: #000;
+  cursor: pointer;
+  border-radius: 10px;
+  font-size: 22px;
+  line-height: 1;
+  opacity: 0.6;
+  transition: background 160ms ease, opacity 160ms ease;
 }
 
-/* mobile */
+.close:hover {
+  opacity: 1;
+  background: rgba(0,0,0,0.06);
+}
+
+.content {
+  padding: 22px 18px 20px;
+  text-align: center;
+}
+
+.big {
+  font-size: 16px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.small {
+  margin-top: 10px;
+  font-size: 13px;
+  opacity: 0.65;
+}
+
+/* Mobile */
 @media (max-width: 600px) {
   :root { --pad: 14px; }
-  .nav { gap: 8px; }
-  .pill { padding: 9px 12px; font-size: 12px; }
-  .toast { top: 74px; }
+  .nav { gap: 10px; }
+  .pill { padding: 14px 18px; font-size: 14px; }
+  .stage { padding-top: 104px; }
 }
