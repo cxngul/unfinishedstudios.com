@@ -9,10 +9,10 @@
 <body>
 
   <main class="stage">
-    <button class="artifact" id="openLoader" type="button" aria-label="Open zip">
+    <button class="artifact" id="openWindow" type="button" aria-label="Open zip window">
       <span class="icon" aria-hidden="true">
-        <!-- Folder icon (clean, airy) -->
-        <svg width="28" height="22" viewBox="0 0 28 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <!-- minimal folder icon -->
+        <svg width="24" height="20" viewBox="0 0 28 22" fill="none" xmlns="http://www.w3.org/2000/svg">
           <path d="M2.5 6.5H10.2L12 4.3C12.3 3.9 12.8 3.7 13.3 3.7H24.5C25.3 3.7 26 4.4 26 5.2V18.5C26 19.9 24.9 21 23.5 21H4.5C3.1 21 2 19.9 2 18.5V8C2 7.1 2.7 6.5 2.5 6.5Z"
                 stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"/>
           <path d="M2.2 8.2H25.8" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" opacity="0.25"/>
@@ -24,48 +24,64 @@
     <div class="hint">click</div>
   </main>
 
-  <!-- Loading overlay -->
-  <div class="overlay" id="overlay" aria-hidden="true">
-    <div class="overlay-card" role="dialog" aria-modal="true" aria-label="Loading">
-      <div class="spinner" aria-hidden="true"></div>
-      <div class="overlay-text">this exists. more later</div>
+  <!-- Window (modal) -->
+  <div class="modal" id="modal" aria-hidden="true">
+    <div class="window" role="dialog" aria-modal="true" aria-label="zip window">
+      <div class="titlebar">
+        <div class="title">unfinishedstudios.zip</div>
+        <button class="close" id="closeWindow" type="button" aria-label="Close">×</button>
+      </div>
+
+      <div class="content">
+        <div class="banner" id="banner">
+          <div class="banner-text">this exists. more later</div>
+        </div>
+
+        <div class="body">
+          <div class="ghost">empty</div>
+          <div class="meta">extracting…</div>
+        </div>
+      </div>
     </div>
   </div>
 
   <script>
-    const openBtn = document.getElementById("openLoader");
-    const overlay = document.getElementById("overlay");
+    const openBtn = document.getElementById("openWindow");
+    const closeBtn = document.getElementById("closeWindow");
+    const modal = document.getElementById("modal");
+    const banner = document.getElementById("banner");
 
-    function openOverlay() {
-      overlay.classList.add("is-open");
-      overlay.classList.add("loading");
-      overlay.setAttribute("aria-hidden", "false");
+    function openModal() {
+      modal.classList.add("is-open");
+      modal.setAttribute("aria-hidden", "false");
       document.body.classList.add("no-scroll");
 
-      // after a moment, reveal the message (feels like real loading)
-      window.setTimeout(() => {
-        overlay.classList.remove("loading");
-      }, 800);
+      // reset banner animation
+      banner.classList.remove("show");
+      // trigger on next frame
+      requestAnimationFrame(() => {
+        banner.classList.add("show");
+      });
     }
 
-    function closeOverlay() {
-      overlay.classList.remove("is-open");
-      overlay.classList.remove("loading");
-      overlay.setAttribute("aria-hidden", "true");
+    function closeModal() {
+      modal.classList.remove("is-open");
+      modal.setAttribute("aria-hidden", "true");
       document.body.classList.remove("no-scroll");
     }
 
-    openBtn.addEventListener("click", openOverlay);
+    openBtn.addEventListener("click", openModal);
+    closeBtn.addEventListener("click", closeModal);
 
-    // close when clicking outside the card
-    overlay.addEventListener("click", (e) => {
-      if (e.target === overlay) closeOverlay();
+    // click outside window closes
+    modal.addEventListener("click", (e) => {
+      if (e.target === modal) closeModal();
     });
 
-    // close on ESC
+    // ESC closes
     window.addEventListener("keydown", (e) => {
-      if (e.key === "Escape" && overlay.classList.contains("is-open")) {
-        closeOverlay();
+      if (e.key === "Escape" && modal.classList.contains("is-open")) {
+        closeModal();
       }
     });
   </script>
