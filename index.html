@@ -8,55 +8,78 @@
 </head>
 <body>
 
-  <header class="topbar">
-    <nav class="nav">
+  <header class="topbar" id="topbar">
+    <nav class="nav" aria-label="Primary">
       <button class="pill" data-label="CV" type="button">cv</button>
       <button class="pill" data-label="SKILLS" type="button">skills</button>
       <button class="pill" data-label="PORTFOLIO" type="button">portfolio</button>
     </nav>
   </header>
 
-  <main class="stage" aria-hidden="false">
+  <main class="stage">
     <div class="mark">unfinishedstudios</div>
+    <div class="spacer" aria-hidden="true"></div>
   </main>
 
-  <!-- toast -->
-  <div class="toast" id="toast" aria-hidden="true">
-    <div class="toast-inner">
-      <div class="toast-title" id="toastTitle">COMING SOON..</div>
-      <div class="toast-sub" id="toastSub">CV</div>
+  <!-- Window -->
+  <div class="modal" id="modal" aria-hidden="true">
+    <div class="window" role="dialog" aria-modal="true" aria-label="Coming soon window">
+      <div class="titlebar">
+        <div class="title" id="winTitle">CV</div>
+        <button class="close" id="closeWindow" type="button" aria-label="Close">×</button>
+      </div>
+      <div class="content">
+        <div class="big">COMING SOON..</div>
+        <div class="small">this exists. more later</div>
+      </div>
     </div>
   </div>
 
   <script>
+    // window open/close
     const pills = document.querySelectorAll(".pill");
-    const toast = document.getElementById("toast");
-    const toastSub = document.getElementById("toastSub");
+    const modal = document.getElementById("modal");
+    const closeBtn = document.getElementById("closeWindow");
+    const winTitle = document.getElementById("winTitle");
 
-    let toastTimer;
+    function openModal(label) {
+      winTitle.textContent = label;
+      modal.classList.add("is-open");
+      modal.setAttribute("aria-hidden", "false");
+    }
 
-    function showToast(label) {
-      toastSub.textContent = label;
-      toast.classList.add("show");
-      toast.setAttribute("aria-hidden", "false");
-
-      window.clearTimeout(toastTimer);
-      toastTimer = window.setTimeout(() => {
-        toast.classList.remove("show");
-        toast.setAttribute("aria-hidden", "true");
-      }, 1400);
+    function closeModal() {
+      modal.classList.remove("is-open");
+      modal.setAttribute("aria-hidden", "true");
     }
 
     pills.forEach((btn) => {
-      btn.addEventListener("click", () => showToast(btn.dataset.label));
+      btn.addEventListener("click", () => openModal(btn.dataset.label));
     });
 
-    // allow click toast to dismiss instantly
-    toast.addEventListener("click", () => {
-      toast.classList.remove("show");
-      toast.setAttribute("aria-hidden", "true");
-      window.clearTimeout(toastTimer);
+    closeBtn.addEventListener("click", closeModal);
+
+    modal.addEventListener("click", (e) => {
+      if (e.target === modal) closeModal();
     });
+
+    window.addEventListener("keydown", (e) => {
+      if (e.key === "Escape" && modal.classList.contains("is-open")) closeModal();
+    });
+
+    // minimal hide-on-scroll for topbar (down hides, up shows)
+    const topbar = document.getElementById("topbar");
+    let lastY = window.scrollY;
+
+    window.addEventListener("scroll", () => {
+      const y = window.scrollY;
+      const goingDown = y > lastY;
+
+      if (goingDown && y > 20) topbar.classList.add("hide");
+      else topbar.classList.remove("hide");
+
+      lastY = y;
+    }, { passive: true });
   </script>
 
 </body>
