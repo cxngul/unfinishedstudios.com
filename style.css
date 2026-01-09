@@ -1,22 +1,18 @@
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
+* { margin: 0; padding: 0; box-sizing: border-box; }
 
 :root {
   --pad: 24px;
+  --bg: #fff;
+  --fg: #000;
 }
 
 body {
   font-family: Helvetica, Arial, sans-serif;
-  background: #ffffff;
-  color: #000000;
+  background: var(--bg);
+  color: var(--fg);
 }
 
-.no-scroll {
-  overflow: hidden;
-}
+.no-scroll { overflow: hidden; }
 
 .stage {
   min-height: 100vh;
@@ -25,47 +21,38 @@ body {
   padding: var(--pad);
 }
 
+/* the .zip button */
 .artifact {
-  appearance: none;
   border: 0;
   background: transparent;
   color: inherit;
   cursor: pointer;
   display: inline-flex;
-  align-items: center;
+  align-items: baseline;
   gap: 10px;
   padding: 10px 12px;
-  border-radius: 12px;
+  border-radius: 14px;
   transition: transform 160ms ease, opacity 160ms ease;
 }
 
-.artifact:hover {
-  transform: translateY(-1px);
-}
+.artifact:hover { transform: translateY(-1px); }
+.artifact:active { transform: translateY(0px); opacity: 0.82; }
 
-.artifact:active {
-  transform: translateY(0px);
-  opacity: 0.8;
-}
-
+/* zip bigger than folder */
 .label {
-  font-size: clamp(1.8rem, 6vw, 2.6rem);
+  font-size: clamp(2.4rem, 8vw, 3.6rem);
   font-weight: 400;
   letter-spacing: 0.01em;
+  line-height: 1;
 }
 
 .icon {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  transform: translateY(1px);
-  opacity: 0.75;
+  opacity: 0.65;
+  transform: translateY(-2px);
   transition: opacity 160ms ease;
 }
 
-.artifact:hover .icon {
-  opacity: 1;
-}
+.artifact:hover .icon { opacity: 1; }
 
 .hint {
   position: fixed;
@@ -75,62 +62,127 @@ body {
   opacity: 0.35;
 }
 
-/* Overlay */
-.overlay {
+/* modal background */
+.modal {
   position: fixed;
   inset: 0;
-  background: rgba(255, 255, 255, 0.92);
   display: grid;
   place-items: center;
+  background: rgba(255,255,255,0.85);
   opacity: 0;
   pointer-events: none;
-  transition: opacity 220ms ease;
+  transition: opacity 180ms ease;
 }
 
-.overlay.is-open {
+.modal.is-open {
   opacity: 1;
   pointer-events: auto;
 }
 
-.overlay-card {
-  display: grid;
-  place-items: center;
-  gap: 14px;
-  padding: 28px 22px;
-  text-align: center;
+/* window */
+.window {
+  width: min(560px, calc(100vw - 28px));
+  border: 1px solid rgba(0,0,0,0.18);
+  border-radius: 18px;
+  background: rgba(255,255,255,0.98);
+  box-shadow: 0 20px 60px rgba(0,0,0,0.10);
+  overflow: hidden;
+  transform: translateY(8px);
+  transition: transform 180ms ease;
 }
 
-.overlay-text {
-  font-size: clamp(0.95rem, 4vw, 1.05rem);
-  opacity: 0.75;
+.modal.is-open .window {
+  transform: translateY(0);
+}
+
+/* titlebar */
+.titlebar {
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 12px 0 14px;
+  border-bottom: 1px solid rgba(0,0,0,0.10);
+}
+
+.title {
+  font-size: 13px;
+  opacity: 0.7;
   letter-spacing: 0.01em;
-  transition: opacity 220ms ease, transform 220ms ease;
 }
 
-/* loading state: message hidden for a moment */
-.overlay.loading .overlay-text {
-  opacity: 0;
-  transform: translateY(6px);
-}
-
-/* Spinner */
-.spinner {
-  width: 28px;
+.close {
+  width: 34px;
   height: 28px;
-  border: 2px solid rgba(0, 0, 0, 0.15);
-  border-top-color: rgba(0, 0, 0, 0.75);
-  border-radius: 999px;
-  animation: spin 800ms linear infinite;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+  border-radius: 10px;
+  font-size: 20px;
+  line-height: 1;
+  opacity: 0.6;
+  transition: opacity 160ms ease, background 160ms ease;
 }
 
-@keyframes spin {
-  to { transform: rotate(360deg); }
+.close:hover {
+  opacity: 1;
+  background: rgba(0,0,0,0.05);
 }
 
-/* Mobile polish */
+/* content */
+.content { position: relative; }
+
+/* banner that slides down */
+.banner {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  transform: translateY(-110%);
+  opacity: 0;
+  transition: transform 320ms ease, opacity 320ms ease;
+  padding: 12px 14px;
+  border-bottom: 1px solid rgba(0,0,0,0.10);
+  background: rgba(255,255,255,0.92);
+  backdrop-filter: blur(6px);
+}
+
+.banner.show {
+  transform: translateY(0);
+  opacity: 1;
+}
+
+.banner-text {
+  font-size: 14px;
+  opacity: 0.78;
+  letter-spacing: 0.01em;
+}
+
+/* body area */
+.body {
+  padding: 68px 16px 18px; /* top padding leaves space for banner */
+  display: grid;
+  gap: 10px;
+  text-align: left;
+}
+
+.ghost {
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  opacity: 0.22;
+}
+
+.meta {
+  font-size: 13px;
+  opacity: 0.45;
+}
+
+/* mobile polish */
 @media (max-width: 600px) {
   :root { --pad: 18px; }
   .hint { display: none; }
-  .artifact { gap: 8px; }
   .label { letter-spacing: 0; }
+  .window { border-radius: 16px; }
 }
