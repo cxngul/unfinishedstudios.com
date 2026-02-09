@@ -9,24 +9,37 @@
 <body>
 
   <header class="topbar" id="topbar">
-    <nav class="nav" aria-label="Primary">
-      <button class="pill" data-label="CV" type="button">cv</button>
-      <button class="pill" data-label="SKILLS" type="button">skills</button>
-      <button class="pill" data-label="PORTFOLIO" type="button">portfolio</button>
+    <nav class="nav">
+      <button class="pill" data-label="CV">cv</button>
+      <button class="pill" data-label="SKILLS">skills</button>
+      <button class="pill" data-label="PORTFOLIO">portfolio</button>
     </nav>
   </header>
 
   <main class="stage">
-    <div class="mark">unfinishedstudios</div>
-    <div class="spacer" aria-hidden="true"></div>
+    <div class="countdown">
+      <div class="time" id="days">--</div>
+      <span class="unit">days</span>
+
+      <div class="time" id="hours">--</div>
+      <span class="unit">hours</span>
+
+      <div class="time" id="minutes">--</div>
+      <span class="unit">minutes</span>
+
+      <div class="time" id="seconds">--</div>
+      <span class="unit">seconds</span>
+    </div>
+
+    <div class="release">until release · 20.02 · 00:00</div>
   </main>
 
   <!-- Window -->
   <div class="modal" id="modal" aria-hidden="true">
-    <div class="window" role="dialog" aria-modal="true" aria-label="Coming soon window">
+    <div class="window">
       <div class="titlebar">
         <div class="title" id="winTitle">CV</div>
-        <button class="close" id="closeWindow" type="button" aria-label="Close">×</button>
+        <button class="close" id="closeWindow">×</button>
       </div>
       <div class="content">
         <div class="big">COMING SOON..</div>
@@ -36,50 +49,82 @@
   </div>
 
   <script>
-    // window open/close
+    /* ---------- COUNTDOWN ---------- */
+
+    const targetDate = new Date(
+      new Date().getFullYear(), // current year
+      1, // February (0 = Jan)
+      20,
+      0, 0, 0
+    );
+
+    const dEl = document.getElementById("days");
+    const hEl = document.getElementById("hours");
+    const mEl = document.getElementById("minutes");
+    const sEl = document.getElementById("seconds");
+
+    function updateCountdown() {
+      const now = new Date();
+      const diff = targetDate - now;
+
+      if (diff <= 0) {
+        dEl.textContent = "0";
+        hEl.textContent = "0";
+        mEl.textContent = "0";
+        sEl.textContent = "0";
+        document.querySelector(".release").textContent = "released";
+        return;
+      }
+
+      const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+      const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
+      const minutes = Math.floor((diff / (1000 * 60)) % 60);
+      const seconds = Math.floor((diff / 1000) % 60);
+
+      dEl.textContent = days;
+      hEl.textContent = hours;
+      mEl.textContent = minutes;
+      sEl.textContent = seconds;
+    }
+
+    updateCountdown();
+    setInterval(updateCountdown, 1000);
+
+    /* ---------- WINDOW ---------- */
+
     const pills = document.querySelectorAll(".pill");
     const modal = document.getElementById("modal");
     const closeBtn = document.getElementById("closeWindow");
     const winTitle = document.getElementById("winTitle");
 
-    function openModal(label) {
-      winTitle.textContent = label;
-      modal.classList.add("is-open");
-      modal.setAttribute("aria-hidden", "false");
-    }
-
-    function closeModal() {
-      modal.classList.remove("is-open");
-      modal.setAttribute("aria-hidden", "true");
-    }
-
-    pills.forEach((btn) => {
-      btn.addEventListener("click", () => openModal(btn.dataset.label));
+    pills.forEach(btn => {
+      btn.addEventListener("click", () => {
+        winTitle.textContent = btn.dataset.label;
+        modal.classList.add("is-open");
+      });
     });
 
-    closeBtn.addEventListener("click", closeModal);
+    closeBtn.addEventListener("click", () => {
+      modal.classList.remove("is-open");
+    });
 
     modal.addEventListener("click", (e) => {
-      if (e.target === modal) closeModal();
+      if (e.target === modal) modal.classList.remove("is-open");
     });
 
-    window.addEventListener("keydown", (e) => {
-      if (e.key === "Escape" && modal.classList.contains("is-open")) closeModal();
-    });
+    /* ---------- HIDE TOPBAR ON SCROLL ---------- */
 
-    // minimal hide-on-scroll for topbar (down hides, up shows)
-    const topbar = document.getElementById("topbar");
     let lastY = window.scrollY;
+    const topbar = document.getElementById("topbar");
 
     window.addEventListener("scroll", () => {
-      const y = window.scrollY;
-      const goingDown = y > lastY;
-
-      if (goingDown && y > 20) topbar.classList.add("hide");
-      else topbar.classList.remove("hide");
-
-      lastY = y;
-    }, { passive: true });
+      if (window.scrollY > lastY && window.scrollY > 20) {
+        topbar.classList.add("hide");
+      } else {
+        topbar.classList.remove("hide");
+      }
+      lastY = window.scrollY;
+    });
   </script>
 
 </body>
