@@ -8,6 +8,10 @@
   --bg: #000;
   --fg: #fff;
   --pad: 18px;
+
+  /* tweak these two for perfect vibe */
+  --topbar-drop: 16px;     /* moves pills down a bit */
+  --countdown-lift: 28px;  /* pulls countdown slightly up */
 }
 
 body {
@@ -18,13 +22,13 @@ body {
 }
 
 /* =======================
-   TOPBAR
+   TOPBAR (slightly lower)
 ======================= */
 .topbar {
   position: fixed;
-  top: 0;
   left: 0;
   right: 0;
+  top: var(--topbar-drop);
   padding: 18px var(--pad);
   display: flex;
   justify-content: center;
@@ -61,26 +65,32 @@ body {
   transition: transform 160ms ease, opacity 160ms ease;
 }
 
-.pill:hover {
-  transform: translateY(-1px);
-}
-
-.pill:active {
-  opacity: 0.85;
-}
+.pill:hover { transform: translateY(-1px); }
+.pill:active { opacity: 0.85; }
 
 /* =======================
-   STAGE (EXACT CENTER)
+   STAGE
+   - centers content
+   - reserves space for topbar
 ======================= */
 .stage {
   min-height: 100vh;
   display: grid;
   place-items: center;
-  padding-top: 0;
+  padding: 0 var(--pad);
+
+  /* keeps content away from header area */
+  padding-top: 120px;
+}
+
+/* wrapper to lift countdown slightly up */
+.countdown-wrap {
+  transform: translateY(calc(-1 * var(--countdown-lift)));
+  text-align: center;
 }
 
 /* =======================
-   COUNTDOWN (CENTERED)
+   COUNTDOWN (compact, desktop+mobile)
 ======================= */
 .countdown {
   display: grid;
@@ -195,6 +205,12 @@ body {
    MOBILE
 ======================= */
 @media (max-width: 600px) {
+  :root {
+    --pad: 14px;
+    --topbar-drop: 12px;
+    --countdown-lift: 18px;
+  }
+
   .pill {
     padding: 14px 18px;
     font-size: 14px;
@@ -202,5 +218,9 @@ body {
 
   .countdown {
     gap: 10px 20px;
+  }
+
+  .stage {
+    padding-top: 108px;
   }
 }
