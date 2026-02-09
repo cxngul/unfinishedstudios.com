@@ -13,17 +13,17 @@ body {
   min-height: 100vh;
 }
 
-/* Topbar */
+/* topbar */
 .topbar {
   position: fixed;
   top: 0;
   left: 0;
   right: 0;
   padding: 18px var(--pad);
-  z-index: 10;
   display: flex;
   justify-content: center;
   transition: transform 260ms ease, opacity 260ms ease;
+  z-index: 10;
 }
 
 .topbar.hide {
@@ -31,53 +31,66 @@ body {
   opacity: 0;
 }
 
-/* centered nav */
 .nav {
-  display: inline-flex;
+  display: flex;
   gap: 14px;
-  align-items: center;
 }
 
-/* BIG pills: white with inner black border */
+/* pills */
 .pill {
-  border: 0;
   background: #fff;
   color: #000;
-  cursor: pointer;
-  padding: 16px 22px;
+  border: none;
+  padding: 16px 24px;
   border-radius: 999px;
   font-size: 15px;
   letter-spacing: 0.02em;
-  text-transform: lowercase;
-
-  /* inner border */
+  cursor: pointer;
   box-shadow: inset 0 0 0 2px #000;
-  transition: transform 170ms ease, opacity 170ms ease;
+  transition: transform 160ms ease, opacity 160ms ease;
 }
 
 .pill:hover { transform: translateY(-1px); }
-.pill:active { transform: translateY(0); opacity: 0.85; }
+.pill:active { opacity: 0.85; }
 
-/* page stage */
+/* stage */
 .stage {
-  min-height: 200vh; /* gives you scroll so the hide effect is visible */
+  min-height: 200vh;
+  padding-top: 120px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+/* countdown */
+.countdown {
   display: grid;
-  place-items: center;
-  padding: 110px var(--pad) 40px;
+  grid-template-columns: repeat(8, auto);
+  gap: 10px 14px;
+  align-items: baseline;
 }
 
-.mark {
-  font-size: 13px;
-  letter-spacing: 0.10em;
+.time {
+  font-size: clamp(2.2rem, 7vw, 3.6rem);
+  font-weight: 400;
+}
+
+.unit {
+  font-size: 12px;
+  opacity: 0.6;
+  letter-spacing: 0.08em;
   text-transform: lowercase;
+}
+
+.release {
+  margin-top: 18px;
+  font-size: 12px;
   opacity: 0.45;
+  letter-spacing: 0.08em;
 }
 
-.spacer {
-  height: 120vh; /* extra empty space so scroll feels intentional */
-}
-
-/* Window modal */
+/* modal */
 .modal {
   position: fixed;
   inset: 0;
@@ -97,75 +110,54 @@ body {
 
 .window {
   width: min(520px, calc(100vw - 28px));
-  border-radius: 18px;
   background: #fff;
   color: #000;
-  box-shadow: 0 22px 70px rgba(0,0,0,0.35);
+  border-radius: 18px;
   overflow: hidden;
-  transform: translateY(10px);
-  transition: transform 220ms ease;
-}
-
-.modal.is-open .window {
-  transform: translateY(0);
+  box-shadow: 0 22px 70px rgba(0,0,0,0.35);
 }
 
 .titlebar {
   height: 46px;
   display: flex;
-  align-items: center;
   justify-content: space-between;
-  padding: 0 12px 0 14px;
+  align-items: center;
+  padding: 0 14px;
   box-shadow: inset 0 -1px 0 rgba(0,0,0,0.12);
 }
 
 .title {
   font-size: 13px;
   letter-spacing: 0.04em;
-  opacity: 0.75;
-  text-transform: uppercase;
+  opacity: 0.7;
 }
 
 .close {
-  width: 36px;
-  height: 30px;
-  border: 0;
-  background: transparent;
-  color: #000;
-  cursor: pointer;
-  border-radius: 10px;
+  background: none;
+  border: none;
   font-size: 22px;
-  line-height: 1;
+  cursor: pointer;
   opacity: 0.6;
-  transition: background 160ms ease, opacity 160ms ease;
-}
-
-.close:hover {
-  opacity: 1;
-  background: rgba(0,0,0,0.06);
 }
 
 .content {
-  padding: 22px 18px 20px;
+  padding: 22px;
   text-align: center;
 }
 
 .big {
   font-size: 16px;
   letter-spacing: 0.12em;
-  text-transform: uppercase;
 }
 
 .small {
   margin-top: 10px;
   font-size: 13px;
-  opacity: 0.65;
+  opacity: 0.6;
 }
 
-/* Mobile */
+/* mobile */
 @media (max-width: 600px) {
-  :root { --pad: 14px; }
-  .nav { gap: 10px; }
-  .pill { padding: 14px 18px; font-size: 14px; }
-  .stage { padding-top: 104px; }
+  .pill { padding: 14px 18px; }
+  .countdown { gap: 8px 10px; }
 }
