@@ -7,11 +7,10 @@
 :root {
   --bg: #000;
   --fg: #fff;
-  --pad: 18px;
 
-  /* tweak these two for perfect vibe */
-  --topbar-drop: 16px;     /* moves pills down a bit */
-  --countdown-lift: 28px;  /* pulls countdown slightly up */
+  /* layout tuning */
+  --topbar-drop: 20px;      /* pills a bit lower */
+  --countdown-lift: 40px;   /* countdown higher */
 }
 
 body {
@@ -21,24 +20,15 @@ body {
   min-height: 100vh;
 }
 
-/* =======================
-   TOPBAR (slightly lower)
-======================= */
+/* ===== TOPBAR ===== */
 .topbar {
   position: fixed;
+  top: var(--topbar-drop);
   left: 0;
   right: 0;
-  top: var(--topbar-drop);
-  padding: 18px var(--pad);
   display: flex;
   justify-content: center;
-  transition: transform 260ms ease, opacity 260ms ease;
   z-index: 10;
-}
-
-.topbar.hide {
-  transform: translateY(-10px);
-  opacity: 0;
 }
 
 .nav {
@@ -46,9 +36,7 @@ body {
   gap: 18px;
 }
 
-/* =======================
-   PILLS
-======================= */
+/* ===== PILLS ===== */
 .pill {
   background: #fff;
   color: #000;
@@ -58,53 +46,36 @@ body {
   font-size: 16px;
   letter-spacing: 0.02em;
   cursor: pointer;
-
-  /* inner black border */
   box-shadow: inset 0 0 0 2px #000;
-
   transition: transform 160ms ease, opacity 160ms ease;
 }
 
 .pill:hover { transform: translateY(-1px); }
 .pill:active { opacity: 0.85; }
 
-/* =======================
-   STAGE
-   - centers content
-   - reserves space for topbar
-======================= */
+/* ===== STAGE ===== */
 .stage {
   min-height: 100vh;
   display: grid;
   place-items: center;
-  padding: 0 var(--pad);
-
-  /* keeps content away from header area */
-  padding-top: 120px;
+  padding-top: 120px; /* space for topbar */
 }
 
-/* wrapper to lift countdown slightly up */
+/* ===== COUNTDOWN POSITION ===== */
 .countdown-wrap {
   transform: translateY(calc(-1 * var(--countdown-lift)));
   text-align: center;
 }
 
-/* =======================
-   COUNTDOWN (compact, desktop+mobile)
-======================= */
 .countdown {
   display: grid;
   grid-template-columns: repeat(4, auto);
-  gap: 14px 32px;
-  align-items: end;
+  gap: 14px 36px;
   justify-content: center;
-  text-align: center;
-  max-width: 640px;
 }
 
 .time {
-  font-size: clamp(2.6rem, 5vw, 4rem);
-  font-weight: 400;
+  font-size: clamp(2.8rem, 5vw, 4.2rem);
   line-height: 1;
 }
 
@@ -112,7 +83,6 @@ body {
   font-size: 12px;
   opacity: 0.6;
   letter-spacing: 0.08em;
-  text-transform: lowercase;
   margin-top: 6px;
 }
 
@@ -121,12 +91,9 @@ body {
   font-size: 12px;
   opacity: 0.45;
   letter-spacing: 0.08em;
-  text-align: center;
 }
 
-/* =======================
-   MODAL WINDOW
-======================= */
+/* ===== MODAL WINDOW ===== */
 .modal {
   position: fixed;
   inset: 0;
@@ -192,23 +159,11 @@ body {
   opacity: 0.6;
 }
 
-/* =======================
-   DESKTOP POLISH
-======================= */
-@media (min-width: 900px) {
-  .countdown {
-    gap: 20px 48px;
-  }
-}
-
-/* =======================
-   MOBILE
-======================= */
+/* ===== MOBILE ===== */
 @media (max-width: 600px) {
   :root {
-    --pad: 14px;
-    --topbar-drop: 12px;
-    --countdown-lift: 18px;
+    --topbar-drop: 14px;
+    --countdown-lift: 24px;
   }
 
   .pill {
@@ -218,9 +173,5 @@ body {
 
   .countdown {
     gap: 10px 20px;
-  }
-
-  .stage {
-    padding-top: 108px;
   }
 }
