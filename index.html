@@ -8,6 +8,7 @@
 </head>
 <body>
 
+  <!-- TOP NAV -->
   <header class="topbar" id="topbar">
     <nav class="nav">
       <button class="pill" data-label="CV">cv</button>
@@ -16,26 +17,36 @@
     </nav>
   </header>
 
+  <!-- MAIN -->
   <main class="stage">
-    <div class="countdown">
-      <div class="time" id="days">--</div>
-      <span class="unit">days</span>
 
-      <div class="time" id="hours">--</div>
-      <span class="unit">hours</span>
+    <div class="countdown-wrap">
+      <div class="countdown">
+        <div>
+          <div class="time" id="days">--</div>
+          <div class="unit">days</div>
+        </div>
+        <div>
+          <div class="time" id="hours">--</div>
+          <div class="unit">hours</div>
+        </div>
+        <div>
+          <div class="time" id="minutes">--</div>
+          <div class="unit">minutes</div>
+        </div>
+        <div>
+          <div class="time" id="seconds">--</div>
+          <div class="unit">seconds</div>
+        </div>
+      </div>
 
-      <div class="time" id="minutes">--</div>
-      <span class="unit">minutes</span>
-
-      <div class="time" id="seconds">--</div>
-      <span class="unit">seconds</span>
+      <div class="release">until release · 20.02 · 00:00</div>
     </div>
 
-    <div class="release">until release · 20.02 · 00:00</div>
   </main>
 
-  <!-- Window -->
-  <div class="modal" id="modal" aria-hidden="true">
+  <!-- WINDOW -->
+  <div class="modal" id="modal">
     <div class="window">
       <div class="titlebar">
         <div class="title" id="winTitle">CV</div>
@@ -49,49 +60,39 @@
   </div>
 
   <script>
-    /* ---------- COUNTDOWN ---------- */
-
+    /* ===== COUNTDOWN ===== */
     const targetDate = new Date(
-      new Date().getFullYear(), // current year
+      new Date().getFullYear(),
       1, // February (0 = Jan)
       20,
       0, 0, 0
     );
 
-    const dEl = document.getElementById("days");
-    const hEl = document.getElementById("hours");
-    const mEl = document.getElementById("minutes");
-    const sEl = document.getElementById("seconds");
+    const d = document.getElementById("days");
+    const h = document.getElementById("hours");
+    const m = document.getElementById("minutes");
+    const s = document.getElementById("seconds");
 
     function updateCountdown() {
       const now = new Date();
       const diff = targetDate - now;
 
       if (diff <= 0) {
-        dEl.textContent = "0";
-        hEl.textContent = "0";
-        mEl.textContent = "0";
-        sEl.textContent = "0";
+        d.textContent = h.textContent = m.textContent = s.textContent = "0";
         document.querySelector(".release").textContent = "released";
         return;
       }
 
-      const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-      const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
-      const minutes = Math.floor((diff / (1000 * 60)) % 60);
-      const seconds = Math.floor((diff / 1000) % 60);
-
-      dEl.textContent = days;
-      hEl.textContent = hours;
-      mEl.textContent = minutes;
-      sEl.textContent = seconds;
+      d.textContent = Math.floor(diff / (1000 * 60 * 60 * 24));
+      h.textContent = Math.floor((diff / (1000 * 60 * 60)) % 24);
+      m.textContent = Math.floor((diff / (1000 * 60)) % 60);
+      s.textContent = Math.floor((diff / 1000) % 60);
     }
 
     updateCountdown();
     setInterval(updateCountdown, 1000);
 
-    /* ---------- WINDOW ---------- */
-
+    /* ===== WINDOW ===== */
     const pills = document.querySelectorAll(".pill");
     const modal = document.getElementById("modal");
     const closeBtn = document.getElementById("closeWindow");
@@ -110,20 +111,6 @@
 
     modal.addEventListener("click", (e) => {
       if (e.target === modal) modal.classList.remove("is-open");
-    });
-
-    /* ---------- HIDE TOPBAR ON SCROLL ---------- */
-
-    let lastY = window.scrollY;
-    const topbar = document.getElementById("topbar");
-
-    window.addEventListener("scroll", () => {
-      if (window.scrollY > lastY && window.scrollY > 20) {
-        topbar.classList.add("hide");
-      } else {
-        topbar.classList.remove("hide");
-      }
-      lastY = window.scrollY;
     });
   </script>
 
