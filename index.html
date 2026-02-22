@@ -1,118 +1,145 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="de">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>unfinishedstudios</title>
-  <link rel="stylesheet" href="style.css" />
+  <title>Unfinished Studios — Countdown</title>
+
+  <style>
+    /* ========== BASIC RESET ========== */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: Arial, Helvetica, sans-serif;
+    }
+
+    body {
+      background: #000;
+      color: #fff;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    /* ========== TOP NAV / BUTTONS ========== */
+    .top-nav {
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+      padding: 18px 12px 0 12px;
+    }
+
+    .pill {
+      border: 1px solid #fff;
+      color: #fff;
+      text-decoration: none;
+      padding: 10px 18px;
+      border-radius: 999px;
+      font-size: 14px;
+      letter-spacing: 0.5px;
+      transition: 0.2s ease;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      white-space: nowrap;
+    }
+
+    .pill:hover {
+      background: #fff;
+      color: #000;
+    }
+
+    /* ========== CENTER CONTENT ========== */
+    .center {
+      width: 100%;
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 40px 16px;
+    }
+
+    .countdown-wrap {
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      transform: translateY(-6vh); /* macht es etwas höher/mittiger */
+    }
+
+    .headline {
+      font-size: 14px;
+      letter-spacing: 2px;
+      opacity: 0.85;
+      text-transform: uppercase;
+    }
+
+    #countdown {
+      font-size: clamp(28px, 6vw, 56px);
+      letter-spacing: 1px;
+      font-weight: 600;
+    }
+
+    .sub {
+      font-size: 12px;
+      opacity: 0.7;
+      letter-spacing: 1px;
+    }
+
+    /* ========== MOBILE TWEAKS ========== */
+    @media (max-width: 480px) {
+      .pill {
+        padding: 9px 14px;
+        font-size: 13px;
+      }
+      .countdown-wrap {
+        transform: translateY(-4vh);
+      }
+    }
+  </style>
 </head>
+
 <body>
+  <!-- TOP BUTTONS -->
+  <div class="top-nav">
+    <a class="pill" href="#" onclick="return false;">CV</a>
+    <a class="pill" href="#" onclick="return false;">Skills</a>
+    <a class="pill" href="#" onclick="return false;">Portfolio</a>
+  </div>
 
-  <!-- TOP NAV -->
-  <header class="topbar" id="topbar">
-    <nav class="nav">
-      <button class="pill" data-label="CV">cv</button>
-      <button class="pill" data-label="SKILLS">skills</button>
-      <button class="pill" data-label="PORTFOLIO">portfolio</button>
-    </nav>
-  </header>
-
-  <!-- MAIN -->
-  <main class="stage">
-
+  <!-- CENTER COUNTDOWN -->
+  <div class="center">
     <div class="countdown-wrap">
-      <div class="countdown">
-        <div>
-          <div class="time" id="days">--</div>
-          <div class="unit">days</div>
-        </div>
-        <div>
-          <div class="time" id="hours">--</div>
-          <div class="unit">hours</div>
-        </div>
-        <div>
-          <div class="time" id="minutes">--</div>
-          <div class="unit">minutes</div>
-        </div>
-        <div>
-          <div class="time" id="seconds">--</div>
-          <div class="unit">seconds</div>
-        </div>
-      </div>
-
-      <div class="release">until release · 20.02 · 00:00</div>
-    </div>
-
-  </main>
-
-  <!-- WINDOW -->
-  <div class="modal" id="modal">
-    <div class="window">
-      <div class="titlebar">
-        <div class="title" id="winTitle">CV</div>
-        <button class="close" id="closeWindow">×</button>
-      </div>
-      <div class="content">
-        <div class="big">COMING SOON..</div>
-        <div class="small">this exists. more later</div>
-      </div>
+      <div class="headline">Launching soon</div>
+      <div id="countdown">loading...</div>
+      <div class="sub">25.02 — 00:00</div>
     </div>
   </div>
 
   <script>
-    /* ===== COUNTDOWN ===== */
-    const targetDate = new Date(
-      new Date().getFullYear(),
-      1, // February (0 = Jan)
-      20,
-      0, 0, 0
-    );
+    // Release Date: 25. Februar 2026, 00:00 Uhr
+    const releaseDate = new Date("February 25, 2026 00:00:00").getTime();
 
-    const d = document.getElementById("days");
-    const h = document.getElementById("hours");
-    const m = document.getElementById("minutes");
-    const s = document.getElementById("seconds");
+    const countdown = setInterval(function () {
+      const now = new Date().getTime();
+      const distance = releaseDate - now;
 
-    function updateCountdown() {
-      const now = new Date();
-      const diff = targetDate - now;
+      const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+      const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+      const seconds = Math.floor((distance % (1000 * 60)) / 1000);
 
-      if (diff <= 0) {
-        d.textContent = h.textContent = m.textContent = s.textContent = "0";
-        document.querySelector(".release").textContent = "released";
-        return;
+      document.getElementById("countdown").innerHTML =
+        days + "d " + hours + "h " + minutes + "m " + seconds + "s";
+
+      if (distance < 0) {
+        clearInterval(countdown);
+        document.getElementById("countdown").innerHTML = "LIVE";
       }
-
-      d.textContent = Math.floor(diff / (1000 * 60 * 60 * 24));
-      h.textContent = Math.floor((diff / (1000 * 60 * 60)) % 24);
-      m.textContent = Math.floor((diff / (1000 * 60)) % 60);
-      s.textContent = Math.floor((diff / 1000) % 60);
-    }
-
-    updateCountdown();
-    setInterval(updateCountdown, 1000);
-
-    /* ===== WINDOW ===== */
-    const pills = document.querySelectorAll(".pill");
-    const modal = document.getElementById("modal");
-    const closeBtn = document.getElementById("closeWindow");
-    const winTitle = document.getElementById("winTitle");
-
-    pills.forEach(btn => {
-      btn.addEventListener("click", () => {
-        winTitle.textContent = btn.dataset.label;
-        modal.classList.add("is-open");
-      });
-    });
-
-    closeBtn.addEventListener("click", () => {
-      modal.classList.remove("is-open");
-    });
-
-    modal.addEventListener("click", (e) => {
-      if (e.target === modal) modal.classList.remove("is-open");
-    });
+    }, 1000);
   </script>
-
 </body>
 </html>
